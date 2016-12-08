@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="dspDashboard">
+<head>
+	<title>DSP</title>
+	<!-- JQuery -->
+	<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="./libs/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="./libs/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="./libs/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!--Angular-->
+	<script type="text/javascript" src="./libs/bower_components/angular/angular.min.js"></script>
+	<script type="text/javascript" src="./libs/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="./js/dspDashboard.js"></script>
+	
+
+
+</head>
+<body>
+	<div class="container">
+
+		<div class="jumbotron">
+			<h1>DSP-IT Dashboard</h1>
+			<p></p>
+			<p>
+				<button class="btn btn-default" ui-sref="dsphome"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></button>
+				<button class="btn btn-default" ui-sref="about"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+			</p>
+		</div>
+
+		<div ui-view></div>
+	
+
+		
+	</div>
+</body>
+</html>

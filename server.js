@@ -6,9 +6,7 @@ var parser = require('xml2json');
 const ls = spawn('sh', ['./modules/test.sh']);
 var output;
 
-app.use('/dsp', function(req, res){
-	
-});
+app.use('/', express.static('public'));
 
 app.get('/dsp/:labid', function(req, res){
         var labinfo = spawn('sh', ['./modules/labinfo.sh', req.params.labid]);

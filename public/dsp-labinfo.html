@@ -1,3 +1,18 @@
 <div class="container" ng-controller="labinfoController as labCon">
 			<h3>LabInfo - {{labCon.name}}</h3>
+			<div class="panel panel-default">
+				<div class="panel-heading">List of Virtual Machines on the Server</div>
+
+				<!-- Table -->
+				<table class="table">
+					<tr>
+						<td>Name</td>
+						<td>Status</td>
+					</tr>
+					<tr ng-repeat="item in labCon.list.vmlist">
+						<td>{{item.name}}</td>
+						<td>{{item.status}}</td>
+					</tr>
+				</table>
+			</div>
 </div>

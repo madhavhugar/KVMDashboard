@@ -1,0 +1,37 @@
+<div class="container" ng-controller="vminfoController as virtCon">
+	<h3>Virtual Machine Info <span class="label label-default">{{virtCon.params.vmid}}</span></h3>
+	<table class="table">
+		<tr>
+			<td><strong>Virtual Machine Parameter</strong></td>
+			<td><strong>Value</strong></td>
+		</tr>
+		<tr>
+			<td>Memory</td>
+			<td>{{virtCon.list.domain.memory.$t}}{{virtCon.list.domain.memory.unit}}</td>
+		</tr>
+		<tr>
+			<td>CPU Cores</td>
+			<td>{{virtCon.list.domain.vcpu.$t}}</td>
+		</tr>
+		<tr>
+			<td>CPU Pinning</td>
+			<td>
+				<table class="table">
+					<tr>
+						<td>vcpu</td>
+						<td>physical cpuset</td>
+					</tr>
+					<tr ng-repeat="item in virtCon.list.domain.cputune.vcpupin">
+						<td>{{item.vcpu}}</td>
+						<td>{{item.cpuset}}</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>Image</td>
+			<td>{{virtCon.list.domain.devices.disk[0].source.file}}</td>
+		</tr>
+	</table>
+
+</div>

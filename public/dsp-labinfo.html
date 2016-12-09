@@ -6,13 +6,16 @@
 				<!-- Table -->
 				<table class="table">
 					<tr>
-						<td>Name</td>
-						<td>Status</td>
+						<td><strong>Name</strong></td>
+						<td><strong>Status</strong></td>
+						<td><strong>More Info</strong></td>
 					</tr>
-					<tr ng-repeat="item in labCon.list.vmlist">
+					<tr ng-repeat="item in labCon.list.vmlist">	<!-- Change here -->
 						<td>{{item.name}}</td>
 						<td>{{item.status}}</td>
+						<td><button class="btn btn-info" ui-sref="vminfo({serverId: labCon.params.serverId, vmid: item.name})">+</button></td>
 					</tr>
 				</table>
 			</div>
+			<!--div ui-view></div-->
 </div>

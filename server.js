@@ -18,13 +18,18 @@ app.get('/dsp/:labid', function(req, res){
 });
 
 app.get('/dsp/:labid/:vm', function(req, res){
+        var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);
         var labvminfo = spawn('sh', ['./modules/labinfoVM.sh', req.params.labid, req.params.vm]);
-	var jsonData;
+        
+	var jsonData, tempOutput, capacity;
+        vmcapacity.stdout.on('data', function(data){
+                capacity = data.toString();
+        })
         labvminfo.stdout.on('data', function(data){
-                jsonData = data.toString();
-		jsonData = parser.toJson(jsonData);
+                tempOutput = data.toString();
+		jsonData = parser.toJson(tempOutput);
+                jsonData.domain.capacity = capacity;
 	        res.send(jsonData);
-
         })
 });
 

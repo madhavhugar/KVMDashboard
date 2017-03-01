@@ -20,11 +20,10 @@ app.get('/dsp/:labid', function(req, res){
 
 app.get('/conciseinfo/:labid', function(req,res){
 	var concisevmInfo = spawn('./modules/labinfo-list.sh', [req.params.labid]);
-	var tempData;
+	var vmData;
         concisevmInfo.stdout.on('data', function(data){
-                tempData = data.toString();
-                console.log(tempData);
-                res.send(tempData);
+                vmData = data.toString();
+                res.send(vmData);
         });
 
 });

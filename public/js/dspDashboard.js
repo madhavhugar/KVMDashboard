@@ -34,16 +34,13 @@ angular
 				replace: true,
       				templateUrl: 'loading.html',
       				link: function(scope, element, attrs) {
-					console.log("This is from the directive");
-					scope.$watch('loading', function(val) {
-          				if (val){
-						console.log(val);
-						scope.loadingStatus = true;
-          				}
-					else{
-						console.log(val);
+						scope.$watch('loading', function(val) {
+          					if (val) {
+								scope.loadingStatus = true;
+          					}
+							else {
             					scope.loadingStatus = false;
-					}
+							}
         				});
         			}
     			}

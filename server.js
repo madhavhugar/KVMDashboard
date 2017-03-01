@@ -17,6 +17,16 @@ app.get('/dsp/:labid', function(req, res){
         });
 });
 
+app.get('/concise', function(req, res){
+	var concisevmInfo = spawn('./modules/labinfo-list.sh', ["dsplab01"]);
+	var jsonData;
+	concisevmInfo.stdout.on('data', function(data){
+		tempData = data.toString();
+//		jsonData = parser.toJson(tempData);
+		res.send(tempData);
+	})
+});
+
 app.get('/dsp/:labid/:vm', function(req, res){
         var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);
         var labvminfo = spawn('sh', ['./modules/labinfoVM.sh', req.params.labid, req.params.vm]);
@@ -34,6 +44,7 @@ app.get('/dsp/:labid/:vm', function(req, res){
 //		res.send(capacity);
 //	})
 });
+
 
 var server = app.listen(8089, function(){
 	var host = server.address().address;

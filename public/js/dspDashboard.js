@@ -28,6 +28,22 @@ angular
 				})
 		})
 
+		.directive('loading', function() {
+    		return {
+      		restrict: 'E',
+      		replace: true,
+      		templateUrl: loading.html,
+      		link: function(scope, element, attr) {
+        		scope.$watch('loading', function(val) {
+          		if (val)
+            		$(element).show();
+          		else
+            		$(element).hide();
+        		});
+      		}
+    		}
+  		})
+
 		.controller('labinfoController', ['$state', '$stateParams', '$http' , function($state, $stateParams, $http){
 			labCon = this;
 			labCon.params = $stateParams;
@@ -67,13 +83,15 @@ angular
 				labCon.list = response.data;
 			  }, function errorCallback(response) {
 				console.log('Error, no data recieved');
-	  });
+	  		});
 
 			$http({
 				method: 'GET',
 				url: "/conciseinfo" + labCon.url
+				labCon.loading = true;
 			}).then(function successCallback(response) {
 					console.log('Got some more data');
+					labCon.loading = false;
 					console.log(response);
 					labCon.info = response.data;
 					console.log(labCon.info.vminfo[0].name);

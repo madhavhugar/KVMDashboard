@@ -29,25 +29,31 @@ angular
 		})
 
 		.directive('loading', function() {
-    		return {
-      		restrict: 'E',
-      		replace: true,
-      		templateUrl: loading.html,
-      		link: function(scope, element, attr) {
-        		scope.$watch('loading', function(val) {
-          		if (val)
-            		$(element).show();
-          		else
-            		$(element).hide();
-        		});
-      		}
-    		}
+    			return {
+      				restrict: 'E',
+				replace: true,
+      				templateUrl: 'loading.html',
+      				link: function(scope, element, attrs) {
+					console.log("This is from the directive");
+					scope.$watch('loading', function(val) {
+          				if (val){
+						console.log(val);
+						scope.loadingStatus = true;
+          				}
+					else{
+						console.log(val);
+            					scope.loadingStatus = false;
+					}
+        				});
+        			}
+    			}
   		})
 
 		.controller('labinfoController', ['$state', '$stateParams', '$http' , function($state, $stateParams, $http){
 			labCon = this;
 			labCon.params = $stateParams;
-			
+			labCon.loadingStatus = true;
+
 			switch(labCon.params.serverId) {
 				case "1":
 					labCon.name = "GroupServer";
@@ -88,13 +94,13 @@ angular
 			$http({
 				method: 'GET',
 				url: "/conciseinfo" + labCon.url
-				labCon.loading = true;
 			}).then(function successCallback(response) {
 					console.log('Got some more data');
 					labCon.loading = false;
 					console.log(response);
 					labCon.info = response.data;
 					console.log(labCon.info.vminfo[0].name);
+					labCon.loadingStatus = false;
 			}, function errorCallback(response) {
 					console.log('Error, no data recieved');
 			});

@@ -9,8 +9,7 @@
 vmList=($(ssh $1 virsh list --all | /usr/bin/awk 'FNR > 2 { print $2 }'))
 
 #echo ${vmList[0]}
-
-printf "{\"vminfo\" : ["
+finalString=$(printf "{\"vminfo\" : [")
 for vmIndex in ${!vmList[*]}
 do
 	networkDomain=()
@@ -27,16 +26,16 @@ do
 	cpuCores=$(xmllint --xpath '//domain/vcpu/text()' - <<< "$temp" 2>/dev/null)
 	if [ $vmIndex != 0 ]
 	then
-		printf ", "
+		finalString+=$(printf ", ")
 	fi
-	printf " {\"name\": \"$vmName\", "
-	printf "\"cpucores\" : \"$cpuCores\", "
-	printf "\"interfaces\" : [ "
+	finalString+=$(printf " {\"name\": \"$vmName\", ")
+	finalString+=$(printf "\"cpucores\" : \"$cpuCores\", ")
+	finalString+=$(printf "\"interfaces\" : [ ")
 	for index in ${!networkDomain[*]}
 	do
 		if [ $index != 0 ]
 		then
-			printf ", "
+			finalString+=$(printf ", ")
 		fi
 		domainVal=$(echo "${networkDomain[$index]}" | grep -oP '(?<=domain=\"0x)\w+(?=\")')
 		busVal=$(echo "${networkBus[$index]}" | grep -oP '(?<=bus=\"0x)\w+(?=\")')
@@ -47,10 +46,12 @@ do
 		then
 			interfaceName="NA"
 		fi
-		printf "{ \"domain\" : \"$domainVal\", \"bus\" : \"$busVal\", "
-		printf "\"slot\" : \"$slotVal\", \"function\" : \"$functionVal\", \"name\" : \"$interfaceName\"}"
+		finalString+=$(printf "{ \"domain\" : \"$domainVal\", \"bus\" : \"$busVal\", ")
+		finalString+=$(printf "\"slot\" : \"$slotVal\", \"function\" : \"$functionVal\", \"name\" : \"$interfaceName\"}")
 	done
-	printf "] }"
+	finalString+=$(printf "] }")
 
 done
-	printf "] }"
+
+finalString+=$(printf "] }")
+echo $finalString

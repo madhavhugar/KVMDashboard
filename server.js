@@ -10,22 +10,25 @@ app.use('/', express.static('public'));
 
 app.get('/dsp/:labid', function(req, res){
         var labinfo = spawn('sh', ['./modules/labinfo.sh', req.params.labid]);
-        var jsonData;
-        labinfo.stdout.on('data', function(data){
+	var concisevmInfo = spawn('./modules/labinfo-list.sh', [req.params.labid]);
+        var jsonData, tempData;
+      labinfo.stdout.on('data', function(data){
                 jsonData = data.toString();
 		res.send(jsonData);
-        });
+	});
 });
 
-app.get('/concise', function(req, res){
-	var concisevmInfo = spawn('./modules/labinfo-list.sh', ["dsplab01"]);
-	var jsonData;
-	concisevmInfo.stdout.on('data', function(data){
-		tempData = data.toString();
-//		jsonData = parser.toJson(tempData);
-		res.send(tempData);
-	})
+app.get('/conciseinfo/:labid', function(req,res){
+	var concisevmInfo = spawn('./modules/labinfo-list.sh', [req.params.labid]);
+	var tempData;
+        concisevmInfo.stdout.on('data', function(data){
+                tempData = data.toString();
+                console.log(tempData);
+                res.send(tempData);
+        });
+
 });
+
 
 app.get('/dsp/:labid/:vm', function(req, res){
         var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);

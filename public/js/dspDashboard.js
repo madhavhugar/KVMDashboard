@@ -35,23 +35,23 @@ angular
 			switch(labCon.params.serverId) {
 				case "1":
 					labCon.name = "GroupServer";
-					labCon.url = '/dsp/dspgroup';
+					labCon.url = '/dspgroup';
 					break;
 				case "2":
 					labCon.name = "LabServer01";
-					labCon.url = '/dsp/dsplab01';
+					labCon.url = '/dsplab01';
 					break;
 				case "3":
 					labCon.name = "LabServer02";
-					labCon.url = "/dsp/dsplab02";
+					labCon.url = "/dsplab02";
 					break;
 				case "4":
 					labCon.name = "LabServer03";
-					labCon.url = "/dsp/dsplab03";
+					labCon.url = "/dsplab03";
 					break;
 				case "5":
 					labCon.name = "LabServer04";
-					labCon.url = "/dsp/dsplab04";
+					labCon.url = "/dsplab04";
 					break;
 				default:
 					labCon.name = "Invalid Server"
@@ -60,7 +60,7 @@ angular
 			
 			$http({
 				method: 'GET',
-			  	url: labCon.url
+			  	url: "/dsp" + labCon.url
 			}).then(function successCallback(response) {
 				console.log('Success, Got some data');
 				console.log(response);
@@ -68,6 +68,18 @@ angular
 			  }, function errorCallback(response) {
 				console.log('Error, no data recieved');
 	  });
+
+			$http({
+				method: 'GET',
+				url: "/conciseinfo" + labCon.url
+			}).then(function successCallback(response) {
+					console.log('Got some more data');
+					console.log(response);
+					labCon.info = response.data;
+					console.log(labCon.info.vminfo[0].name);
+			}, function errorCallback(response) {
+					console.log('Error, no data recieved');
+			});
 			//remove this
 			//labCon.dummylist = { "vmlist" : [ {"name":"dsp-vm-student-tadasa","status":"running"}, {"name":"dsp-student-cnlab","status":"shut"} ]};
 

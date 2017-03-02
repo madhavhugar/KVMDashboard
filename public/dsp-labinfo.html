@@ -19,7 +19,7 @@
 			</div>
 			<loading ng-show="labCon.loadingStatus"></loading>
 			<!--div ui-view></div-->
-			<div ng-show=!"labCon.loadingStatus">
+			<div ng-hide="labCon.loadingStatus">
 				<h4>Overview - {{labCon.name}}</h4>
 					<div class="panel panel-default">
 					<div class="panel-heading">List of Virtual Machines on the Server</div>
@@ -29,17 +29,18 @@
 						<tr>
 							<td><strong>Name</strong></td>
 							<td><strong>Cores</strong></td>
-							<td><strong>Network - Interface Name</strong></td>
 							<td><strong>Network - Interface PCI</strong></td>
+							<td><strong>Network - Interface Name</strong></td>
 						</tr>
-						<tr ng-repeat="item in labCon.info.vminfo">	<!-- Change here -->
-							<td>{{item.name}}</td>
-							<td>{{item.cpucores}}</td>
-							<tr ng-repeat="subitem in item.interfaces">
-								<td>{{subitem.bus}}:{{subitem.domain}}:{{subitem.slot}}.{{subitem.function}}</td>
-							<tr ng-repeat="subitem in item.interfaces">
-								<td>{{subitem.name}}</td>
-							</tr>
+						<tr ng-repeat="item in labCon.info.vminfo">
+							<td rowspan="item.interfaces.length">{{item.name}}</td>
+							<td rowspan="item.interfaces.length">{{item.cpucores}}</td>
+							<td ng-repeat="subitem in item.interfaces">
+								{{subitem.name}}
+							</td>
+							<td ng-repeat="subitem in item.interfaces">
+                                                                {{subitem.bus}}:{{subitem.domain}}:{{subitem.slot}}.{{subitem.function}}
+                                                        </td>
 						</tr>
 					</table>
 				</div>

@@ -2,6 +2,7 @@ var express  = require('express');
 var app  = express();
 var spawn = require('child_process').spawn;
 var parser = require('xml2json');
+var sleep = require('sleep');
 
 const ls = spawn('sh', ['./modules/test.sh']);
 var output;
@@ -20,17 +21,19 @@ app.get('/dsp/:labid', function(req, res){
 
 app.get('/conciseinfo/:labid', function(req,res){
 	var concisevmInfo = spawn('./modules/labinfo-list.sh', [req.params.labid]);
-	var vmData;
+	var vmData = '';
         concisevmInfo.stdout.on('data', function(data){
-                vmData = data.toString();
-                res.send(vmData);
+                vmData += data;
         });
+	concisevmInfo.stdout.on('end', function(data){
+                res.send(vmData);
+	});
 
 });
 
 
 app.get('/dsp/:labid/:vm', function(req, res){
-        var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);
+//        var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);
         var labvminfo = spawn('sh', ['./modules/labinfoVM.sh', req.params.labid, req.params.vm]);
 
 	var jsonData, tempOutput, capacity;
@@ -45,6 +48,15 @@ app.get('/dsp/:labid/:vm', function(req, res){
 //		capacity = data.toString();
 //		res.send(capacity);
 //	})
+});
+
+app.get('/capacity/:labid/:vm', function(req, res){
+	var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);
+	var capacityVal;
+	vmcapacity.stdout.on('data', function(data){
+		capacityVal = data.toString();
+		res.send(capacityVal)
+	})
 });
 
 

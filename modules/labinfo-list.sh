@@ -16,7 +16,10 @@ do
 	networkBus=()
 	networkSlot=()
 	networkFunction=()
+	cpuPinningvcpu=()
+	cpuPinningset=()
 
+	#All the xml data is stored in the variable $temp and accessed using xml parser called xmllint
 	temp=$(ssh $1 virsh dumpxml ${vmList[$vmIndex]})
 	vmName=$(xmllint --xpath '//domain/name/text()' - <<< "$temp" 2>/dev/null)
 	networkDomain+=($(xmllint --xpath '//domain/devices/hostdev/source/address/@domain' - <<< "$temp" 2>/dev/null))
@@ -24,12 +27,27 @@ do
 	networkSlot+=($(xmllint --xpath '//domain/devices/hostdev/source/address/@slot' - <<< "$temp" 2>/dev/null))
 	networkFunction+=($(xmllint --xpath '//domain/devices/hostdev/source/address/@function' - <<< "$temp" 2>/dev/null))
 	cpuCores=$(xmllint --xpath '//domain/vcpu/text()' - <<< "$temp" 2>/dev/null)
+	cpuPinningvcpu+=($(xmllint --xpath '//domain/cputune/vcpupin/@vcpu' - <<< "$temp" 2>/dev/null))
+	cpuPinningset+=($(xmllint --xpath '//domain/cputune/vcpupin/@cpuset' - <<< "$temp" 2>/dev/null))
 	if [ $vmIndex != 0 ]
 	then
 		finalString+=$(printf ", ")
 	fi
 	finalString+=$(printf " {\"name\": \"$vmName\", ")
 	finalString+=$(printf "\"cpucores\" : \"$cpuCores\", ")
+	finalString+=$(printf "\"cpuvcpu\" : [ ")
+	for index in ${!cpuPinningset[*]}
+	do
+		if [ $index != 0 ]
+		then
+			finalString+=$(printf ", ")
+		fi
+		vcpuPinning=$(echo "${cpuPinningvcpu[$index]}" | grep -oP '(?<=vcpu=\")\w+(?=\")')
+		cpusetPinning=$(echo "${cpuPinningset[$index]}" | grep -oP '(?<=cpuset=\").*(?=\")')
+
+		finalString+=$(printf "{ \"vcpu\" : \"$vcpuPinning\", \"cpuset\" : \"$cpusetPinning\"}")
+	done
+	finalString+=$(printf "], ")
 	finalString+=$(printf "\"interfaces\" : [ ")
 	for index in ${!networkDomain[*]}
 	do
@@ -54,4 +72,5 @@ do
 done
 
 finalString+=$(printf "] }")
+sleep 5
 echo $finalString

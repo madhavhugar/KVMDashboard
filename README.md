@@ -20,6 +20,14 @@
 * public - HTML page and templates
 * public/js - Angular Controller for frontend
 
+## Adding new server details
+
+* When including a new server on to the web application, the following have to be modified:
+	* public/js/dspDashboard.js - add another switch case statement in *labinfoController* & *vminfoController*
+	* Create a user dspdashboard on the new server 
+	* Add ssh public key authentication between the new server & the live_ubuntu container
+	* Write a shell script interfaceMapper.sh on the server (which is similar to interface.sh on other servers(/home/dspadmin/interfaceMapper.sh))
+
 ## Other packages
 
 * Used pm2 node module as a production process manager

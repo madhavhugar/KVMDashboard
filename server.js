@@ -2,7 +2,6 @@ var express  = require('express');
 var app  = express();
 var spawn = require('child_process').spawn;
 var parser = require('xml2json');
-var sleep = require('sleep');
 
 const ls = spawn('sh', ['./modules/test.sh']);
 var output;
@@ -33,21 +32,14 @@ app.get('/conciseinfo/:labid', function(req,res){
 
 
 app.get('/dsp/:labid/:vm', function(req, res){
-//        var vmcapacity = spawn('sh', ['./modules/vmcapacity.sh', req.params.labid, req.params.vm]);
         var labvminfo = spawn('sh', ['./modules/labinfoVM.sh', req.params.labid, req.params.vm]);
 
 	var jsonData, tempOutput, capacity;
         labvminfo.stdout.on('data', function(data){
                 tempOutput = data.toString();
         	jsonData = parser.toJson(tempOutput);
-	//		jsonData.domain.id = "10GB"
-		//console.log(jsonData);
         	res.send(jsonData);
                 })
-//	vmcapacity.stdout.on('data', function(data){
-//		capacity = data.toString();
-//		res.send(capacity);
-//	})
 });
 
 app.get('/capacity/:labid/:vm', function(req, res){
